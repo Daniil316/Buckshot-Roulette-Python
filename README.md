@@ -9,7 +9,6 @@ This is the first version of the project. Future updates and new features are pl
 ### Key Features
 * **Language**: Russian (game interface).
 * **Local PvP**: Designed for two players on a single machine.
-* **Game Logic**: Shell generation via random.shuffle.
 * **Interface**: Character-by-character text output.
 
 ### Requirements
