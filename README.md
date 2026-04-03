@@ -9,8 +9,10 @@ This is the first version of the project. Future updates and new features are pl
 ### Key Features
 * **Language**: Russian (game interface).
 * **Local PvP**: Designed for two players on a single machine.
-* **Interface**: Character-by-character text output.
+* **Interface**: Character-by-character text output (Does not work in the terminal)
 
 ### Requirements
 * **Interpreter**: Python 3.7 or higher.
 * **Execution**: System terminal or IDLE.
+
+In the future, gameplay is expected to improve when playing in the terminal. This may affect gameplay when playing IDLE
