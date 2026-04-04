@@ -18,10 +18,10 @@ Based on the original game "Buckshot Roulette" by Mike Klubnika.
 * **Color Support**: Added color formatting (work in progress).
 * **Instant Input**: Replaced "Key+Enter" interaction with direct keypress detection.
 * **Screen Buffering**: Integrated screen clearing.
-* **New Soundtrack**: Added "Before Every Load". **Note: If you launch the game via IDLE, you might experience overlapping audio tracks. Please close the IDLE Shell window and keep only the console window open to resolve this. As for VS Code, PyCharm, and others, I am not sure.**
+* **New Soundtrack**: Added "Before Every Load" from original game. **Note: If you launch the game via IDLE, you might experience overlapping audio tracks. Please close the IDLE Shell window and keep only the console window open to resolve this. As for VS Code, PyCharm, and others, I am not sure.**
 * **Adrenaline Time Limit**: Added a 20-second countdown for Adrenaline use (further refinements coming soon).
 
-### Please extract all files from the ZIP archive before running the game.
+### Please extract all files from the ZIP archive before running the game otherwise there will be no music
 ---
 Текстовая реализация механик Buckshot Roulette на Python для терминала.
 
@@ -39,7 +39,7 @@ Based on the original game "Buckshot Roulette" by Mike Klubnika.
 * **Цветовое оформление**: Добавлена поддержка цветов (в разработке).
 * **Мгновенный ввод**: Взаимодействие «Клавиша + Enter» заменено на прямое считывание нажатий.
 * **Очистка экрана**: Интегрирована очистка консоли.
-* **Новый саундтрек**: Добавлена композиция «Before Every Load». **Примечание: если вы додумались запустить игру через IDLE, две звуковые дорожки наложатся друг на друга. Пожалуйста, закройте окно IDLE Shell и оставьте только окно консоли, чтобы исправить это. Насчет VS Code, PyCharm и других не знаю. **
+* **Новый саундтрек**: Добавлен саундтрек «Before Every Load» из оригинальной игры. **Примечание: если вы додумались запустить игру через IDLE, две звуковые дорожки наложатся друг на друга. Закройте окно IDLE Shell и оставьте только окно консоли, чтобы исправить это. Насчет VS Code, PyCharm и других не знаю. **
 * **Ограничение времени для Адреналина**: Добавлен 20-секундный таймер при использовании Адреналина (будет дорабатываться в будущем).
 
-### Пожалуйста, перед использованием извлеките все файлы из zip-архива
+### Пожалуйста, перед использованием извлеките все файлы из zip-архива, иначе не будет музыки
