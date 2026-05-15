@@ -4,8 +4,6 @@ import os
 import sys
 import msvcrt
 import subprocess
-import winsound
-winsound.PlaySound("before_every_load.wav", winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
 if "idlelib" in sys.modules:
     subprocess.Popen(['cmd', '/k', 'py', __file__], creationflags=subprocess.CREATE_NEW_CONSOLE)
     sys.exit() 
@@ -13,7 +11,16 @@ os.system('')
 sys.stdout.write("\x1b]2;Buckshot Roulette\x07")
 RED = "\033[31m"
 BLUE = "\033[34m"
+P1="\033[93m"
+P2="\033[96m"
 RESET = "\033[0m"
+def Print(text):
+    """Выводит текст посимвольно с задержкой"""
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        sleep(0.02)
+    print()
 def timing():
     start_time = time()
     while True:
@@ -33,33 +40,32 @@ def reload():
     global item1, item2, buck
     buck = choice(buckshot)
     shuffle(buck)
+    Print(f'{RESET}')
     Print('Перезарядка...')
-    sleep(3) #Задержка (для реалистичности)
+    sleep(3)
     Print(f'Новая комбинация: {buck.count(0)} {BLUE}холостых{RESET} и {buck.count(1)} {RED}боевых{RESET}')
     if len(item1) <= 4: #Тут начинаются проверки, т.к. поставлено ограничение в 8 предметов максимум, и если предметов больше 4, то уменьшаем добавление
         item1 += [choice(all_item) for i in range(4)]
-        Print('Игрок 1:')
+        Print(f'{P1}Игрок 1:')
         for i in range(len(item1)): Print(f'{i+1}. {item1[i]}')
+        Print(f'{RESET}')
     else:
         item1 += [choice(all_item) for i in range(8-len(item1))]
-        Print('Игрок 1:')
+        Print(f'{P1}Игрок 1:')
         for i in range(len(item1)): Print(f'{i+1}. {item1[i]}')
+        Print(f'{RESET}')
     if len(item2) <= 4:
         item2 += [choice(all_item) for i in range(4)]
-        Print('Игрок 2:')
+        Print(f'{P2}Игрок 2:')
         for i in range(len(item2)): Print(f'{i+1}. {item2[i]}')
+        Print(f'{RESET}')
     else:
         item2 += [choice(all_item) for i in range(8-len(item2))]
-        Print(f'Игрок 2:')
+        Print(f'{P2}Игрок 2:')
         for i in range(len(item2)): Print(f'{i+1}. {item2[i]}')
+        Print(f'{RESET}')
+        sleep(10)
     clear()
-def Print(text):
-    """Выводит текст посимвольно с задержкой"""
-    for char in text:
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        sleep(0.02)
-    print()
 player1 = player2 = 5 #Сделал 1 раунд вместо 3 и всем сделал 5 хп
 buckshot = [[0,1],
             [0,0,1],
@@ -78,37 +84,41 @@ shuffle(buck) #Перемешивание комбинации
 turn = randint(1,2) #Выбор игрока, который ходит первым
 x2dmg = 0 #Двойной урон (от ножа)
 all_item = ['Сигареты','Лупа','Пиво','Нож','Инвертор', 'Адреналин'] #Все предметы в игре на данный момент
+Print('Нажмите любую клавишу, чтобы начать')
+answer=msvcrt.getch().decode('utf-8')
+clear()
 Print(f'Первый ход игрока {turn}.')
 Print(f'Начальная комбинация: {buck.count(0)} {BLUE}холостых{RESET} и {buck.count(1)} {RED}боевых{RESET}')
 Print('Предметы:')
 item1 = [choice(all_item) for i in range(4)] #Выбор предметов для игрока 1
-Print('Игрок 1:')
+Print(f'{P1}Игрок 1:')
 for i in range(len(item1)): Print(f'{i+1}. {item1[i]}')
+Print(f'{RESET}')
 item2 = [choice(all_item) for i in range(4)] #Выбор предметов для игрока 2
-Print('Игрок 2:')
+Print(f'{P2}Игрок 2:')
 for i in range(len(item2)): Print(f'{i+1}. {item2[i]}')
-sleep(1)
+Print(f'{RESET}')
+sleep(10)
 clear()
 while player1>0 and player2>0:
-    sleep(1)
     clear()
-    Print(f'Текущее количество зарядов: игрок 1 - {player1}, игрок 2 - {player2}')
+    Print(f'{RESET}Текущее количество зарядов: {P1}игрок 1 - {player1}{RESET}, {P2}игрок 2 - {player2}{RESET}')
     if turn==1:
         pov=False
-        Print('Ход игрока 1')
+        Print(f'{P1}Ход игрока 1')
         while True:
             if not buck:
                 reload()
             if not pov:
-                Print('Выбор:')
+                Print(f'{P1}Выбор:')
                 for i in range(len(item1)):
-                    if item1[i] == 'Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{RESET}')
+                    if item1[i] == 'Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{P1}')
                     if item1[i] == 'Лупа': Print(f'{i+1}. Лупа: посмотреть текущий патрон')
                     if item1[i] == 'Пиво': Print(f'{i+1}. Пиво: пропустить текущий патрон')
                     if item1[i] == 'Нож': Print(f'{i+1}. Нож: увеличивает урон вдвойне')
                     if item1[i] == 'Инвертор': Print(f'{i+1}. Инвертор: меняет патрон на противоположный')
                     if item1[i] == 'Адреналин': Print(f'{i+1}. Адреналин: забрать любой предмет кроме другого Адреналина и использовать его')
-                Print(f'0. Дробовик: противник пропустит ход, если вы выстрелите в себя {BLUE}холостым{RESET}')
+                Print(f'0. Дробовик: противник пропустит ход, если вы выстрелите в себя {BLUE}холостым{P1}')
             Print('Выберите предмет')
             try:
                 choise=int(msvcrt.getch().decode('utf-8'))
@@ -139,11 +149,12 @@ while player1>0 and player2>0:
                             else:
                                 player2 -= 2
                         else: player2 -= 1
-                        Print(f'Это {RED}боевой{RESET} патрон! У противника осталось {player2} зарядов')
-                    else: Print(f'Это {BLUE}холостой{RESET} патрон!')
+                        Print(f'Это {RED}боевой{P1} патрон! У противника осталось {player2} зарядов')
+                    else: Print(f'Это {BLUE}холостой{P1} патрон!')
                     x2dmg=0
                     turn += 1
                     del buck[0]
+                    sleep(1.5)
                     break
                 elif answer == 2: #В себя (переход хода только если боевой)
                     Print('Вы стреляете в себя...')
@@ -156,31 +167,33 @@ while player1>0 and player2>0:
                                 player1 -= 2
                         else: player1 -= 1
                         turn += 1
-                        Print(f'Это {RED}боевой{RESET} патрон! У вас осталось {player1} зарядов')
-                    else: Print(f'Это {BLUE}холостой{RESET} патрон! Вы ходите еще раз')
+                        Print(f'Это {RED}боевой{P1} патрон! У вас осталось {player1} зарядов')
+                    else: Print(f'Это {BLUE}холостой{P1} патрон! Вы ходите еще раз')
                     x2dmg=0
                     del buck[0]
+                    sleep(1.5)
                     break
             elif item1[choise-1] == 'Адреналин':
                 if not item2:
                     Print('У противника нет предметов!')
                     del item1[choise-1]
+                    sleep(1.5)
                     clear()
                     continue
                 clear()
                 Print('Выбор:')
                 for i in range(len(item2)):
-                    if item2[i] == 'Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{RESET}')
+                    if item2[i] == 'Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{P1}')
                     if item2[i] == 'Лупа': Print(f'{i+1}. Лупа: посмотреть текущий патрон')
                     if item2[i] == 'Пиво': Print(f'{i+1}. Пиво: пропустить текущий патрон')
                     if item2[i] == 'Нож': Print(f'{i+1}. Нож: увеличивает урон вдвойне')
                     if item2[i] == 'Инвертор': Print(f'{i+1}. Инвертор: меняет патрон на противоположный')
-                    if item2[i] == 'Адреналин': Print(f'{i+1}. Адреналин: забрать любой предмет кроме другого Адреналина и использовать его {RED}(невозможно забрать!){RESET}')
+                    if item2[i] == 'Адреналин': Print(f'{i+1}. Адреналин: забрать любой предмет кроме другого Адреналина и использовать его {RED}(невозможно забрать!){P1}')
                 while True:
                     Print('Выберите предмет, который хотите забрать')
                     answer=timing()
                     if not answer:
-                        Print(f'{RED}Действие андреналина закончилось!{RESET}')
+                        Print(f'{RED}Действие андреналина закончилось!{P1}')
                         del item1[choise-1]
                         break
                     else:
@@ -191,47 +204,47 @@ while player1>0 and player2>0:
                     if answer>len(item2) or answer<=0:
                         continue
                     if item2[answer-1] == 'Адреналин':
-                        Print(f'{RED}Невозможно забрать!{RESET}')
+                        Print(f'{RED}Невозможно забрать!{P1}')
                         continue
                     elif item2[answer-1] == 'Сигареты':
                         if player1 == 5:
-                            Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{RESET}')
+                            Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{P1}')
                         else:
                             player1 += 1
                             Print(f'Вы использовали сигареты. Теперь у вас {player1} зарядов')
                     elif item2[answer-1] == 'Лупа':
-                        if buck[0] == 1: Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{RESET}')
-                        else: Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{RESET}')
+                        if buck[0] == 1: Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{P1}')
+                        else: Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{P1}')
                     elif item2[answer-1] == 'Пиво':
-                        if buck[0] == 1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{RESET}')
-                        else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{RESET}')
+                        if buck[0] == 1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{P1}')
+                        else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{P1}')
                         del buck[0]
                     elif item2[answer-1] == 'Инвертор':
                         Print('Вы использовали инвертор. Текущий патрон меняется на противоположный')
                         buck[0] = 0 if buck[0] == 1 else 1
                     elif item2[answer-1] == 'Нож':
-                        Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{RESET}')
+                        Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{P1}')
                         x2dmg = 1
                     del item2[answer-1]
                     del item1[choise-1]
-                    sleep(2)
+                    sleep(1.5)
                     clear()
                     break
                 if not buck:
                     reload()
             elif item1[choise-1]=='Сигареты':
-                if player1==5:Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{RESET}')
+                if player1==5:Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{P1}')
                 else:
                     player1+=1
                     Print(f'Вы использовали сигареты. Теперь у вас {player1} зарядов')
                 del item1[choise-1]
             elif item1[choise-1]=='Лупа':
-                if buck[0]==1:Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{RESET}')
-                else:Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{RESET}')
+                if buck[0]==1:Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{P1}')
+                else:Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{P1}')
                 del item1[choise-1]
             elif item1[choise-1]=='Пиво':
-                if buck[0]==1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{RESET}')
-                else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{RESET}')
+                if buck[0]==1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{P1}')
+                else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{P1}')
                 del buck[0]
                 del item1[choise-1]
             elif item1[choise-1]=='Инвертор':
@@ -239,30 +252,30 @@ while player1>0 and player2>0:
                 buck[0]=0 if buck[0]==1 else 1
                 del item1[choise-1]
             elif item1[choise-1]=='Нож':
-                Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{RESET}')
+                Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{P1}')
                 x2dmg=1
                 del item1[choise-1]
-            sleep(2)
+            sleep(1.5)
             clear()
             if not buck:
                 reload()
     else:
-        #Тут тоже самое. Мне лень сносить все в одну функцию, да и зачем
-        Print('Ход игрока 2')
+        #Тут тоже самое. Мне лень сносить все в одну функцию
+        Print(f'{P2}Ход игрока 2')
         pov=False
         while True:
             if not buck:
                 reload()
             if not pov:
-                Print('Выбор:')
+                Print(f'{P2}Выбор:')
                 for i in range(len(item2)):
-                    if item2[i]=='Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{RESET}')
+                    if item2[i]=='Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{P2}')
                     if item2[i]=='Лупа': Print(f'{i+1}. Лупа: посмотреть текущий патрон')
                     if item2[i]=='Пиво': Print(f'{i+1}. Пиво: пропустить текущий патрон')
                     if item2[i]=='Нож': Print(f'{i+1}. Нож: увеличивает урон вдвойне')
                     if item2[i]=='Инвертор': Print(f'{i+1}. Инвертор: меняет патрон на противоположный')
                     if item2[i]=='Адреналин': Print(f'{i+1}. Адреналин: забрать любой предмет кроме другого Адреналина и использовать его')
-                Print(f'0. Дробовик: противник пропустит ход, если вы выстрелите в себя {BLUE}холостым{RESET}')
+                Print(f'0. Дробовик: противник пропустит ход, если вы выстрелите в себя {BLUE}холостым{P2}')
             Print('Выберите предмет')
             try:
                 choise=int(msvcrt.getch().decode('utf-8'))
@@ -292,11 +305,12 @@ while player1>0 and player2>0:
                             else:
                                 player1-=2
                         else: player1-=1
-                        Print(f'Это {RED}боевой{RESET} патрон! У противника осталось {player1} зарядов')
-                    else: Print(f'Это {BLUE}холостой{RESET} патрон!')
+                        Print(f'Это {RED}боевой{P2} патрон! У противника осталось {player1} зарядов')
+                    else: Print(f'Это {BLUE}холостой{P2} патрон!')
                     x2dmg=0
                     turn-=1
                     del buck[0]
+                    sleep(1.5)
                     break
                 elif answer==2:
                     Print('Вы стреляете в себя...')
@@ -309,10 +323,11 @@ while player1>0 and player2>0:
                                 player2-=2
                         else: player2-=1
                         turn-=1
-                        Print(f'Это {RED}боевой{RESET} патрон! У вас осталось {player2} зарядов')
-                    else: Print(f'Это {BLUE}холостой{RESET} патрон! Вы ходите еще раз')
+                        Print(f'Это {RED}боевой{P2} патрон! У вас осталось {player2} зарядов')
+                    else: Print(f'Это {BLUE}холостой{P2} патрон! Вы ходите еще раз')
                     x2dmg=0
                     del buck[0]
+                    sleep(1.5)
                     break
             elif item2[choise-1]=='Адреналин':
                 if not item1:
@@ -323,17 +338,17 @@ while player1>0 and player2>0:
                 clear()
                 Print('Выбор:')
                 for i in range(len(item1)):
-                    if item1[i]=='Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{RESET}')
+                    if item1[i]=='Сигареты': Print(f'{i+1}. Сигареты: +1 заряд. {RED}Не действует, если сейчас у игрока 5 зарядов{P2}')
                     if item1[i]=='Лупа': Print(f'{i+1}. Лупа: посмотреть текущий патрон')
                     if item1[i]=='Пиво': Print(f'{i+1}. Пиво: пропустить текущий патрон')
                     if item1[i]=='Нож': Print(f'{i+1}. Нож: увеличивает урон вдвойне')
                     if item1[i]=='Инвертор': Print(f'{i+1}. Инвертор: меняет патрон на противоположный')
-                    if item1[i]=='Адреналин': Print(f'{i+1}. Адреналин: забрать любой предмет кроме другого Адреналина и использовать его {RED}(невозможно забрать!){RESET}')
+                    if item1[i]=='Адреналин': Print(f'{i+1}. Адреналин: забрать любой предмет кроме другого Адреналина и использовать его {RED}(невозможно забрать!){P2}')
                 while True:
                     Print('Выберите предмет, который хотите забрать')
                     answer=timing()
                     if not answer:
-                        Print(f'{RED}Действие андреналина закончилось!{RESET}')
+                        Print(f'{RED}Действие андреналина закончилось!{P2}')
                         del item2[choise-1]
                         break
                     else:
@@ -344,46 +359,46 @@ while player1>0 and player2>0:
                     if answer>len(item1) or answer<=0:
                         continue
                     if item1[answer-1]=='Адреналин':
-                        Print(f'{RED}Невозможно забрать!{RESET}')
+                        Print(f'{RED}Невозможно забрать!{P2}')
                         continue
                     elif item1[answer-1]=='Сигареты':
-                        if player2==5: Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{RESET}')
+                        if player2==5: Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{P2}')
                         else:
                             player2+=1
                             Print(f'Вы использовали сигареты. Теперь у вас {player2} зарядов')
                     elif item1[answer-1]=='Лупа':
-                        if buck[0]==1: Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{RESET}')
-                        else: Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{RESET}')
+                        if buck[0]==1: Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{P2}')
+                        else: Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{P2}')
                     elif item1[answer-1]=='Пиво':
-                        if buck[0]==1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{RESET}')
-                        else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{RESET}')
+                        if buck[0]==1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{P2}')
+                        else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{P2}')
                         del buck[0]
                     elif item1[answer-1] == 'Инвертор':
                         Print('Вы использовали инвертор. Текущий патрон меняется на противоположный')
                         buck[0]=0 if buck[0]==1 else 1
                     elif item1[answer-1]=='Нож':
-                        Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{RESET}')
+                        Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{P2}')
                         x2dmg=1
                     del item2[choise-1]
                     del item1[answer-1]
-                    sleep(2)
+                    sleep(1.5)
                     clear()
                     break
                 if not buck:
                     reload()
             elif item2[choise-1]=='Сигареты':
-                if player2==5: Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{RESET}')
+                if player2==5: Print(f'Вы использовали сигареты. {RED}Вы не получаете никакого эффекта, потому что у вас максимальное количество зарядов{P2}')
                 else:
                     player2+=1
                     Print(f'Вы использовали сигареты. Теперь у вас {player2} зарядов')
                 del item2[choise-1]
             elif item2[choise-1]=='Лупа':
-                if buck[0]==1: Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{RESET}')
-                else: Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{RESET}')
+                if buck[0]==1: Print(f'Вы использовали лупу. Текущий патрон {RED}боевой{P2}')
+                else: Print(f'Вы использовали лупу. Текущий патрон {BLUE}холостой{P2}')
                 del item2[choise-1]
             elif item2[choise-1]=='Пиво':
-                if buck[0]==1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{RESET}')
-                else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{RESET}')
+                if buck[0]==1: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {RED}боевой{P2}')
+                else: Print(f'Вы использовали пиво. Вы пропускаете текущий патрон. Этот патрон {BLUE}холостой{P2}')
                 del buck[0]
                 del item2[choise-1]
             elif item2[choise-1]=='Инвертор':
@@ -391,13 +406,13 @@ while player1>0 and player2>0:
                 buck[0]=0 if buck[0]==1 else 1
                 del item2[choise-1]
             elif item2[choise-1]=='Нож':
-                Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{RESET}')
+                Print(f'Вы использовали нож. {RED}В этот ход дробовик будет наносить x2 урона{P2}')
                 x2dmg=1
                 del item2[choise-1]
-            sleep(2)
+            sleep(1.5)
             clear()
             if not buck:
                 reload()
 clear()
-Print('Игрок 1 победил!') if player1 else Print('Игрок 2 победил!')
+Print('{P1}Игрок 1 победил!{RESET}') if player1 else Print('{P2}Игрок 2 победил!{RESET}')
 sleep(5)
