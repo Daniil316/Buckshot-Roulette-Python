@@ -1,4 +1,4 @@
-# Buckshot Roulette (Python Terminal Edition)
+# Buckshot Roulette (Версия для терминала)
 Текстовая реализация механик Buckshot Roulette на Python для терминала.
 
 Основано на оригинальной игре «Buckshot Roulette» от Майка Клубники (Mike Klubnika).
@@ -19,3 +19,7 @@
 ## В будущем
 * **Добавление языков (в активной разработке)**: Со следущих версий также будет прилагаться файл игры на английском языке. Возможно, также будут китайский и испанский. Позже скорее всего это будет объединено в один общий файл игры.
 * **Добавление оставшихся предметов (частично приостановлено)**: Будут добавлены предметы, которые есть в оригинальной версии но которых нет здесь
+## Геймплей
+* Фото 1 <img width="1478" height="755" alt="image" src="https://github.com/user-attachments/assets/9955efd4-a676-45c4-b151-c1834b68a10d" />
+* Фото 2 <img width="1471" height="759" alt="image" src="https://github.com/user-attachments/assets/c7bfbf07-f14f-41dd-bdd6-74025c936b83" />
+* Фото 3 <img width="1480" height="766" alt="image" src="https://github.com/user-attachments/assets/2a2470fe-a3eb-46af-9853-feff104ae198" />
