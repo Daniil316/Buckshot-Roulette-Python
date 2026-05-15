@@ -414,5 +414,5 @@ while player1>0 and player2>0:
             if not buck:
                 reload()
 clear()
-Print('{P1}Игрок 1 победил!{RESET}') if player1 else Print('{P2}Игрок 2 победил!{RESET}')
+Print(f'{P1}Игрок 1 победил!{RESET}') if player1 else Print(f'{P2}Игрок 2 победил!{RESET}')
 sleep(5)
